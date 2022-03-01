@@ -7,12 +7,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
 @Slf4j
 @Builder
 @AllArgsConstructor
-public class SqsPoller {
+public class SqsPoller1x {
   private final String queueUrl;
   private final MessageClient1x messageClient1x;
 

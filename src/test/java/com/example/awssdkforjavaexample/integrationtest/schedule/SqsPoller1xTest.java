@@ -1,15 +1,16 @@
 package com.example.awssdkforjavaexample.integrationtest.schedule;
 
-import com.example.awssdkforjavaexample.integrationtest.IntegrationTestBase;
-import com.example.awssdkforjavaexample.schedule.SqsPoller;
 import com.example.awssdkforjavaexample.sdk1x.MessageClient1x;
+import com.example.awssdkforjavaexample.integrationtest.IntegrationTestBase;
+import com.example.awssdkforjavaexample.schedule.SqsPoller1x;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-class SqsPollerTest extends IntegrationTestBase {
-  @Autowired private SqsPoller sqs1xPoller;
+class SqsPoller1xTest extends IntegrationTestBase {
+
+  @Autowired private SqsPoller1x sqs1xPoller;
   @Autowired private MessageClient1x messageClient1x;
 
   @Value("${sqs.1x.queue.url}")

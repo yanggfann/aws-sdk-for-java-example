@@ -14,6 +14,11 @@ import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.utility.DockerImageName;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.services.sqs.SqsClient;
+import software.amazon.awssdk.services.sqs.model.CreateQueueResponse;
+import software.amazon.awssdk.services.sqs.model.QueueAttributeName;
 
 public class LocalStackITInitializer
     implements ApplicationContextInitializer<ConfigurableApplicationContext> {
@@ -33,9 +38,20 @@ public class LocalStackITInitializer
         .withCredentials(localStackContainer.getDefaultCredentialsProvider())
         .build();
 
+    SqsClient sqsClient =
+        SqsClient.builder()
+            .endpointOverride(sqsEndpoint)
+            .credentialsProvider(
+                StaticCredentialsProvider.create(
+                    AwsBasicCredentials.create(
+                        localStackContainer.getAccessKey(), localStackContainer.getSecretKey())))
+            .build();
+
     System.out.println("sqs endpoint" + sqsEndpoint.toString());
 
+    System.setProperty("aws.endpointOverride", sqsEndpoint.toString());
     System.setProperty("sqs.1x.queue.url", createSqs1xQueue(amazonSQS));
+    System.setProperty("sqs.2x.queue.url", createSqs2xQueue(sqsClient));
     System.setProperty("aws.accessKeyId", localStackContainer.getAccessKey());
     System.setProperty("aws.secretAccessKey", localStackContainer.getSecretKey());
   }
@@ -49,5 +65,16 @@ public class LocalStackITInitializer
                 .withAttributes(Map.of("FifoQueue", "true")));
 
     return response.getQueueUrl();
+  }
+
+  private String createSqs2xQueue(SqsClient sqsClient) {
+    CreateQueueResponse response =
+        sqsClient.createQueue(
+            software.amazon.awssdk.services.sqs.model.CreateQueueRequest.builder()
+                .queueName("sqs-2x-queue.fifo")
+                .attributes(Map.of(QueueAttributeName.FIFO_QUEUE, "true"))
+                .build());
+
+    return response.queueUrl();
   }
 }

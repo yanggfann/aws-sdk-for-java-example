@@ -1,3 +1,5 @@
 sqs.1x.queue.url:
+sqs.2x.queue.url:
 aws:
   region:
+  endpointOverride:
