@@ -41,6 +41,14 @@ Default endpoint: https://sqs.ap-southeast-2.amazonaws.com
 
 [Working with Amazon Simple Queue Service message queues](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/examples-sqs-message-queues.html)
 
+### [Asynchronous programming](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/asynchronous.html)
+
+The AWS SDK for Java 2.x features truly nonblocking asynchronous clients that implement high concurrency across a few threads.
+
+Synchronous methods block your thread’s execution until the client receives a response from the service. Asynchronous methods return immediately, giving control back to the calling thread without waiting for a response.
+
+- [SqsAsyncClient](https://sdk.amazonaws.com/java/api/latest/software/amazon/awssdk/services/sqs/SqsAsyncClient.html)
+
 ## Why the AWS SQS default endpoint is https://sqs.ap-southeast-2.amazonaws.com/ ?
 
 You can find the reason according to the following steps in the origin code: 
